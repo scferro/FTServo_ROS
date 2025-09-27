@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SCServo.h"
 
-SMS_STS sms_sts;
+HLSCL hlscl;
 
 int main(int argc, char **argv)
 {
@@ -10,18 +10,18 @@ int main(int argc, char **argv)
         return 0;
 	}
 	std::cout<<"serial:"<<argv[1]<<std::endl;
-    if(!sms_sts.begin(115200, argv[1])){
+    if(!hlscl.begin(115200, argv[1])){
         std::cout<<"Failed to init sms/sts motor!"<<std::endl;
         return 0;
     }
 
-	sms_sts.unLockEprom(1);//打开EPROM保存功能
+	hlscl.unLockEprom(1);//打开EPROM保存功能
 	std::cout<<"unLock Eprom"<<std::endl;
-	sms_sts.writeByte(1, SMS_STS_ID, 2);//ID
+	hlscl.writeByte(1, HLSCL_ID, 2);//ID
 	std::cout<<"write ID:"<<2<<std::endl;
-	sms_sts.LockEprom(2);////关闭EPROM保存功能
+	hlscl.LockEprom(2);////关闭EPROM保存功能
 	std::cout<<"Lock Eprom"<<std::endl;
-	sms_sts.end();
+	hlscl.end();
 	return 1;
 }
 

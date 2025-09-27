@@ -5,7 +5,7 @@ Ping指令测试,测试总线上相应ID舵机是否就绪,广播指令只适用
 #include <iostream>
 #include "SCServo.h"
 
-SMS_STS sms_sts;
+HLSCL hlscl;
 
 int main(int argc, char **argv)
 {
@@ -14,16 +14,16 @@ int main(int argc, char **argv)
         return 0;
 	}
 	std::cout<<"serial:"<<argv[1]<<std::endl;
-    if(!sms_sts.begin(115200, argv[1])){
+    if(!hlscl.begin(115200, argv[1])){
         std::cout<<"Failed to init sms/sts motor!"<<std::endl;
         return 0;
     }
-	int ID = sms_sts.Ping(1);
+	int ID = hlscl.Ping(1);
 	if(ID!=-1){
 		std::cout<<"ID:"<<ID<<std::endl;
 	}else{
 		std::cout<<"Ping servo ID error!"<<std::endl;
 	}
-	sms_sts.end();
+	hlscl.end();
 	return 1;
 }

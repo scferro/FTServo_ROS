@@ -1,3 +1,7 @@
+/*
+电机模式例子
+*/
+
 #include <iostream>
 #include "SCServo.h"
 
@@ -17,15 +21,22 @@ int main(int argc, char **argv)
 	sc.PWMMode(1);
 	std::cout<<"mode = "<<1<<std::endl;
 	while(1){
+		//舵机(ID1)以最大50%扭矩正向旋转
 		sc.WritePWM(1, 500);
 		std::cout<<"pwm = "<<500<<std::endl;
 		sleep(2);
+
+		//舵机(ID1)停止旋转
 		sc.WritePWM(1, 0);
 		std::cout<<"pwm = "<<0<<std::endl;
 		sleep(2);
+
+		//舵机(ID1)以最大50%扭矩反向旋转
 		sc.WritePWM(1, -500);
 		std::cout<<"pwm = "<<-500<<std::endl;
 		sleep(2);
+
+		//舵机(ID1)停止旋转
 		sc.WritePWM(1,0);
 		std::cout<<"pwm = "<<0<<std::endl;
 		sleep(2);

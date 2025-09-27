@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SCServo.h"
 
-SMS_STS sms_sts;
+HLSCL hlscl;
 
 int main(int argc, char **argv)
 {
@@ -10,22 +10,26 @@ int main(int argc, char **argv)
         return 0;
 	}
 	std::cout<<"serial:"<<argv[1]<<std::endl;
-    if(!sms_sts.begin(115200, argv[1])){
+    if(!hlscl.begin(115200, argv[1])){
         std::cout<<"Failed to init sms/sts motor!"<<std::endl;
         return 0;
     }
 	while(1){
-		//舵机(广播)以最高速度V=60*0.732=43.92rpm，加速度A=50*8.7deg/s^2，运行至P1=4095位置
-		sms_sts.WritePosEx(0xfe, 4095, 2400, 50);
+		//舵机(ID1/ID2)以最高速度V=60*0.732=43.92rpm，加速度A=50*8.7deg/s^2，最大扭矩电流T=3500*6.5=3250mA，运行至P1=4095位置
+		hlscl.RegWritePosEx(1, 4095, 60, 50, 500);
+		hlscl.RegWritePosEx(2, 4095, 60, 50, 500);
+		hlscl.RegWriteAction();
 		std::cout<<"pos = "<<4095<<std::endl;
 		usleep(((4095-0)*1000/(60*50)+(60*50)*10/(50)+50)*1000);//[(P1-P0)/(V*50)]*1000+[(V*50)/(A*100)]*1000 + 50(误差)
   
-		//舵机(广播)以最高速度V=60*0.732=43.92rpm，加速度A=50*8.7deg/s^2，运行至P0=0位置
-		sms_sts.WritePosEx(0xfe, 0, 2400, 50);
+		//舵机(ID1/ID2)以最高速度V=60*0.732=43.92rpm，加速度A=50*8.7deg/s^2，最大扭矩电流T=500*6.5=3250mA，运行至P1=4095位置
+		hlscl.RegWritePosEx(1, 0, 60, 50, 500);
+		hlscl.RegWritePosEx(2, 0, 60, 50, 500);
+		hlscl.RegWriteAction();
 		std::cout<<"pos = "<<0<<std::endl;
 		usleep(((4095-0)*1000/(60*50)+(60*50)*10/(50)+50)*1000);//[(P1-P0)/(V*50)]*1000+[(V*50)/(A*100)]*1000 + 50(误差)
 	}
-	sms_sts.end();
+	hlscl.end();
 	return 1;
 }
 
