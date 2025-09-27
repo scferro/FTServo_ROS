@@ -26,17 +26,16 @@ public:
 protected:
 	int writeSCS(unsigned char *nDat, int nLen);//输出nLen字节
 	int readSCS(unsigned char *nDat, int nLen);//输入nLen字节
+	int readSCS(unsigned char *nDat, int nLen, unsigned long TimeOut);
 	int writeSCS(unsigned char bDat);//输出1字节
 	void rFlushSCS();//
 	void wFlushSCS();//
 public:
 	unsigned long int IOTimeOut;//输入输出超时
-	int Err;
 public:
-	virtual int getErr(){  return Err;  }
-	virtual int setBaudRate(int baudRate);
-	virtual bool begin(int baudRate, const char* serialPort);
-	virtual void end();
+	int setBaudRate(int baudRate);
+	bool begin(int baudRate, const char* serialPort);
+	void end();
 protected:
     int fd;//serial port handle
     struct termios orgopt;//fd ort opt

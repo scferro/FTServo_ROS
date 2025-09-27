@@ -131,6 +131,38 @@ int SCSerial::setBaudRate(int baudRate)
     return 1;
 }
 
+int SCSerial::readSCS(unsigned char *nDat, int nLen, unsigned long TimeOut)
+{	
+    int fs_sel;
+    fd_set fs_read;
+	int rvLen = 0;
+
+    struct timeval time;
+
+    FD_ZERO(&fs_read);
+    FD_SET(fd,&fs_read);
+
+    time.tv_sec = 0;
+    time.tv_usec = TimeOut*1000;
+
+    //使用select实现串口的多路通信
+	while(1){
+		fs_sel = select(fd+1, &fs_read, NULL, NULL, &time);
+		if(fs_sel){
+			rvLen += read(fd, nDat+rvLen, nLen-rvLen);
+			//printf("nLen = %d rvLen = %d\n", nLen, rvLen);
+			if(rvLen<nLen){
+				continue;
+			}else{
+				return rvLen;
+			}
+		}else{
+			//printf("serial read fd read return 0\n");
+			return rvLen;
+		}
+	}
+}
+
 int SCSerial::readSCS(unsigned char *nDat, int nLen)
 {	
     int fs_sel;
